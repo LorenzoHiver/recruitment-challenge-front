@@ -107,12 +107,6 @@ const RacePage = () => {
     [raceState.rocket1.progress, raceState.rocket2.progress]
   );
 
-  console.log('État de la course:', {
-    raceId,
-    rocket1Progress,
-    rocket2Progress,
-    raceState
-  });
 
   return (
     <div className="flex flex-col items-center min-h-screen overflow-hidden relative">

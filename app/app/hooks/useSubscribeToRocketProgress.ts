@@ -12,10 +12,7 @@ const useSubscribeToRocketProgress = (raceId: string, rocketId: string) => {
       variables: { raceId, rocketId },
       onError: (error) => {
         console.error('Erreur de souscription:', error);
-      },
-      onData: (data) => {
-        console.log('Données reçues:', data);
-      },
+      }
     }
   );
 
