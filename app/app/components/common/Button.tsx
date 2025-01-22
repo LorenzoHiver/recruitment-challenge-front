@@ -4,12 +4,14 @@ interface ButtonProps {
   onClick: () => void;
   disabled?: boolean;
   children: React.ReactNode;
+  className?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
   onClick,
   disabled = false,
   children,
+  className = ''
 }) => {
   return (
     <button
@@ -19,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
         disabled
           ? "bg-gray-400 cursor-not-allowed"
           : "bg-blue-800 hover:bg-blue-900"
-      }`}
+      } ${className}`}
     >
       {children}
     </button>

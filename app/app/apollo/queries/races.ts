@@ -21,7 +21,7 @@ export const GET_RACE = gql`
 `;
 
 export interface GetRaceResponse {
-  race: Race;
+  race: Race | null;
 }
 
 export interface GetRaceVariables {

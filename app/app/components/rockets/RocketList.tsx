@@ -1,40 +1,50 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRockets } from "../../hooks";
+import React, { useCallback, useState } from "react";
+import { useRockets, useRace } from "../../hooks";
 import RocketCard from "./RocketCard";
 import Loader from "../common/Loader";
 import { Button } from "../common";
+import { useRouter } from "next/navigation";
+import { useApolloError } from "../../hooks/useApolloError";
+import { ApolloError } from "@apollo/client";
+import ErrorMessage from "../common/ErrorMessage";
 
 const RocketList: React.FC = () => {
   const { rockets, loading, error } = useRockets();
   const [selectedRockets, setSelectedRockets] = useState<string[]>([]);
+  const router = useRouter();
+  const { startRace } = useRace();
+  const { handleError } = useApolloError();
 
-  const toggleRocketSelection = (rocketId: string) => {
+  const toggleRocketSelection = useCallback((rocketId: string) => {
     setSelectedRockets((prevSelected) => {
       if (prevSelected.includes(rocketId)) {
         return prevSelected.filter((id) => id !== rocketId);
       } else if (prevSelected.length < 2) {
         return [...prevSelected, rocketId];
-      } else {
-        return [prevSelected[0], rocketId];
       }
+      return [prevSelected[0], rocketId];
     });
-  };
+  }, []);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader />
-      </div>
-    );
-  }
+  const handleStartRace = useCallback(async () => {
+    if (selectedRockets.length !== 2) return;
 
-  if (error) {
-    return (
-      <p className="text-red-500 text-center mt-6">Erreur : {error.message}</p>
-    );
-  }
+    try {
+      const race = await startRace(selectedRockets[0], selectedRockets[1]);
+      if (!race?.id) throw new Error("Course invalide");
+
+      router.push(`/race/${race.id}/${selectedRockets[0]}/${selectedRockets[1]}`);
+    } catch (error) {
+      if (error instanceof ApolloError) {
+        handleError(error);
+      }
+    }
+  }, [selectedRockets, startRace, router, handleError]);
+
+  if (loading) return <Loader />;
+  if (error) return <ErrorMessage message={error.message} />;
 
   return (
     <div
@@ -46,7 +56,7 @@ const RocketList: React.FC = () => {
       <div className="text-center">
         <h1 className="text-4xl font-bold text-white">Rocket Race 🚀</h1>
         <p className="text-lg text-white mt-2">
-          Sélectionnez deux fusées parmi la liste ci-dessous
+          Sélectionnez deux fusées pour commencer
         </p>
       </div>
 
@@ -62,12 +72,9 @@ const RocketList: React.FC = () => {
       </div>
 
       <Button
-        onClick={() =>
-          alert(
-            "Course démarrée avec les fusées : " + selectedRockets.join(", ")
-          )
-        }
+        onClick={handleStartRace}
         disabled={selectedRockets.length !== 2}
+        className="mt-8"
       >
         DÉMARRER LA COURSE
       </Button>
