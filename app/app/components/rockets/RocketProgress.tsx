@@ -10,7 +10,7 @@ interface RocketProgressProps {
 
 export const RocketProgress = ({ progress, exploded, isWinner, rocket }: RocketProgressProps) => {
   return (
-    <div className="relative h-[80vh] w-24 flex flex-col items-center">
+    <div className="relative h-[70vh] w-24 flex flex-col items-center">
       <div 
         className="absolute w-full flex flex-col items-center transition-all duration-300"
         style={{ 

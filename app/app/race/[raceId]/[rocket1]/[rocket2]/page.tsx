@@ -100,7 +100,7 @@ const RacePage = () => {
         winner: rocket1Id as string
       }));
     }
-  }, [raceState.rocket1.exploded, raceState.rocket2.exploded, rocket1Id, rocket2Id]);
+  }, [raceState.rocket1.exploded, raceState.rocket2.exploded, raceState.winner, rocket1Id, rocket2Id]);
 
   const maxProgress = useMemo(() => 
     Math.max(raceState.rocket1.progress, raceState.rocket2.progress),
