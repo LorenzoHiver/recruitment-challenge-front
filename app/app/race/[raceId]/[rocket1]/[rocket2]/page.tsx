@@ -5,6 +5,7 @@ import { useEffect, useState, useMemo, useCallback } from 'react';
 import { RocketProgress } from '@/app/components/rockets';
 import { useSubscribeToRocketProgress, useRockets } from '@/app/hooks';
 import AnimatedBackground from '@/app/components/common/AnimatedBackground';
+import { VictoryModal } from '@/app/components/common';
 
 interface RaceState {
   rocket1: {
@@ -107,6 +108,10 @@ const RacePage = () => {
     [raceState.rocket1.progress, raceState.rocket2.progress]
   );
 
+  const winnerRocket = useMemo(() => {
+    if (!raceState.winner) return null;
+    return raceState.winner === rocket1Id ? rocket1Data : rocket2Data;
+  }, [raceState.winner, rocket1Id, rocket1Data, rocket2Data]);
 
   return (
     <div className="flex flex-col items-center min-h-screen overflow-hidden relative">
@@ -128,6 +133,13 @@ const RacePage = () => {
           rocket={rocket2Data}
         />
       </div>
+
+      {winnerRocket && (
+        <VictoryModal
+          rocketName={winnerRocket.name}
+          rocketImage={winnerRocket.image}
+        />
+      )}
     </div>
   );
 };

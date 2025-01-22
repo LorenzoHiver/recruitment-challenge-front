@@ -37,11 +37,12 @@ export const RocketProgress = ({ progress, exploded, isWinner, rocket }: RocketP
       
       <div className="absolute bottom-0 w-full h-full">
         <div 
-          className={`absolute bottom-0 w-full transition-all duration-300 ease-out ${
+          className={`absolute bottom-0 w-full transition-all duration-300 ease-out rounded-t-lg ${
             exploded ? 'bg-red-500' : isWinner ? 'bg-green-500' : 'bg-blue-500'
           }`}
           style={{ 
             height: `${progress}%`,
+            transform: 'translateY(20px)',
             transition: 'height 0.3s ease-out'
           }}
         />
